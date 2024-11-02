@@ -1,6 +1,6 @@
 # Juliana Gómez Consuegra's Portfolio
 
-In this repository, you will find some showcased projects from my Master's in Information and Data Science at UC Berkeley. Additional projects can be found on my [website] (https://julianagomezconsuegra.edi.eco/): 
+In this repository, you will find some showcased projects from my Master's in Information and Data Science at UC Berkeley. Additional projects can be found on my [website](https://julianagomezconsuegra.edi.eco/): 
 
 ## 1_Taming turbulence with Machine Learning
 

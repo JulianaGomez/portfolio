@@ -48,7 +48,7 @@ Our team (Henry Caldera, Eunice Ngai and myself) chose to estimate the effect of
 - sandwich
 										
 
-## 4_Gender equity and climate change
+## Gender equity and climate change
 I collaborated with PhD candidates Silvia Barbereschi (UC Berkeley) and Beatrice Montano (Columbia) as a Research Assistant in their Gender Equity and Climate Change in Tanzania project. The goal of the project was to determine whether climate change had driven to changes in gender norms in Tanzania.
 I generated a dataset based on the land cover dataset from Copernicus Climate Data Store for the years between 2020-2022, and generated summary statistics for variables related to gender in Tanzania and other East African countries (Kenya, Uganda, Mozambique).
 I also generated visualizations for the number of consecutive dry days (image shown here).

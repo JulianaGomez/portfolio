@@ -1,0 +1,288 @@
+---
+title: "Afrobarometer 2022"
+author: "Juliana Gómez Consuegra"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(haven) #load spss file
+library(dplyr) #data manipulation
+library(foreign)
+library(ggplot2)
+library(tidyr)
+```
+
+
+```{r load_data, include=FALSE}
+#with foreign
+afro_2022 <-read.spss("data/afrobarometer_2022/afrobarometer_release-dataset_merge-34ctry_r8_en_2023-03-01.sav",  
+                   to.data.frame = TRUE) 
+
+head(afro_2022)
+```
+
+```{r format_names, include=FALSE}
+# change all . in afro_2022 column names to _
+names(afro_2022) <- gsub("\\.", "_", names(afro_2022))
+```
+
+Questions in 2022 are different from 2019: 
+
+|---|---|---|
+|Variable label|2019|2022|
+|Respondent number|RESPNO|RESPNO|
+|Country|COUNTRY|COUNTRY|
+|Location level|LOCATION_LEVEL_1|REGION|
+|Men have more right to job|Q38D|X|
+|Women have equal right to land|Q38E|X|
+|Better if woman takes care of household|Q38F|X|
+|Girls and boys have equal chance at education|Q77A|X|
+|Women and men have equal chance to earn income|Q77B|X|
+|Women and men have equal chance of paying job|Q77C|X|
+|Women and men have equal chance to own/inherit land|Q77D|X|
+|Justified for men to beat their wives|Q78B|X|
+|Experienced discrimination based on gender|Q86A|X|
+|Employment status|Q94 |Q95A|
+|Who decides how money is used|Q95C|X|
+
+
+We will use the following questions related to gender in 2022 (where one of the options is= 28 Gender issues/women's rights) for our analysis. 
+
+|---|---|---|
+|Question number|Variable label|
+|Q48PT1|Most important problems – 1st response|
+|Q48PT2|Most important problems – 2nd response|
+|Q48PT3|Most important problems – 3rd response|
+
+
+```{r subset_df, include=FALSE}
+country_list = c('Tanzania', 'Kenya', 'Uganda', 'Mozambique')
+questions_columns = c('RESPNO','COUNTRY','REGION','Q48PT1','Q48PT2', 'Q48PT3','Q95A')
+
+afro_subset <- afro_2022 %>% 
+  select(all_of(questions_columns)) %>% 
+  filter(COUNTRY %in% country_list)
+```
+
+
+```{r check_for_nulls, include=FALSE}
+#check for nulls in afro_subset. No NULLS
+print(afro_subset %>%
+  summarise(count = sum(is.na(.))))
+```
+
+
+Change labels to levels: 
+
+Pt1: 0-33, 9995, 9998, 9999, -1
+Pt2: 1-33, 9995, 9996
+Pt3: 1-33, 9996
+
+```{r to_lower, include=FALSE}
+# change values in Q48PT1, Q48PT2, Q48PT3 to lower case
+afro_subset$Q48PT1 <- tolower(afro_subset$Q48PT1)
+afro_subset$Q48PT2 <- tolower(afro_subset$Q48PT2)
+afro_subset$Q48PT3 <- tolower(afro_subset$Q48PT3)
+
+# trim ws in values for Q48PT1, Q48PT2, Q48PT3
+afro_subset$Q48PT1 <- trimws(afro_subset$Q48PT1)
+afro_subset$Q48PT2 <- trimws(afro_subset$Q48PT2)
+afro_subset$Q48PT3 <- trimws(afro_subset$Q48PT3)
+
+# Define a function to replace spaces around backslashes
+replace_specific_around_all_slashes <- function(x) {
+  # Use gsub() with a capturing group and backreference
+  gsub("(?<=\\w)(\\s*)(\\/)(?=\\w)", "\\1/", x, perl = TRUE)  # Escape slash with \\/
+}
+
+
+afro_subset$Q48PT1 <- replace_specific_around_all_slashes(afro_subset$Q48PT1)
+afro_subset$Q48PT2 <- replace_specific_around_all_slashes(afro_subset$Q48PT2)
+afro_subset$Q48PT3 <- replace_specific_around_all_slashes(afro_subset$Q48PT3)
+
+```
+
+
+
+```{r levels, include=FALSE}
+# check levels for all variables
+afro_subset[,4:7] <- lapply(afro_subset[,4:7], factor)
+
+
+for (i in 4:7) {
+  print("--------------------------------")
+  print(names(afro_subset)[i])
+  print(levels(afro_subset[[i]]))
+}
+
+```
+
+
+
+
+
+```{r format_variables, include=FALSE}
+afro_subset <- afro_subset %>% mutate(Q48PT1=recode(Q48PT1,
+                            "agricultural marketing" = 32,                        
+                            "aids" = 21,
+                            "civil war" = 31,
+                            "climate change" = 33,
+                            "communications" = 12,
+                            "corruption" = 24,
+                            "crime and security" = 23,
+                            "democracy/political rights" = 29,
+                            "discrimination/ inequality" = 27,
+                            "don’t know" = 9999,
+                            "drought" = 9,
+                            "education" = 14,
+                            "electricity" = 16,
+                            "farming/agriculture" = 7,
+                            "food shortage/famine" = 8,
+                            "gender issues / women’s rights" = 28,
+                            "health" = 20,
+                            "housing" = 15,
+                            "infrastructure / roads" = 13,
+                            "land" = 10,
+                            "loans / credit" = 6,
+                            "management of the economy" = 1,
+                            "nothing/ no problems" = 0,
+                            "orphans/street children/homeless children" = 18,
+                            "other responses" = 9995,
+                            "political instability/political divisions/ ethnic tensions" = 26,
+                            "political violence" = 25,
+                            "poverty/destitution" = 4,
+                            "rates and taxes" = 5,
+                            "refused" = 9998,
+                            "services (other)" = 19,
+                            "sickness / disease" = 22,
+                            "transportation" = 11,
+                            "unemployment" = 3,
+                            "wages, incomes and salaries" = 2,
+                            "war (international)" = 30,
+                            "water supply" = 17)) %>% 
+mutate(Q48PT2=recode(Q48PT2,
+                            "agricultural marketing" = 32,                        
+                            "aids" = 21,
+                            "civil war" = 31,
+                            "climate change" = 33,
+                            "communications" = 12,
+                            "corruption" = 24,
+                            "crime and security" = 23,
+                            "democracy/political rights" = 29,
+                            "discrimination/ inequality" = 27,
+                            "drought" = 9,
+                            "education" = 14,
+                            "electricity" = 16,
+                            "farming/agriculture" = 7,
+                            "food shortage/famine" = 8,
+                            "gender issues / women’s rights" = 28,
+                            "health" = 20,
+                            "housing" = 15,
+                            "infrastructure / roads" = 13,
+                            "land" = 10,
+                            "loans / credit" = 6,
+                            "management of the economy" = 1,
+                            "no further reply" = 9996,
+                            "orphans/street children/homeless children" = 18,
+                            "other responses" = 9995,
+                            "political instability/political divisions/ ethnic tensions" = 26,
+                            "political violence" = 25,
+                            "poverty/destitution" = 4,
+                            "rates and taxes" = 5,
+                            "refused"= 9998,
+                            "services (other)" = 19,
+                            "sickness / disease" = 22,
+                            "transportation" = 11,
+                            "unemployment" = 3,
+                            "wages, incomes and salaries" = 2,
+                            "war (international)" = 30,
+                            "water supply" = 17))%>%
+mutate(Q48PT3=recode(Q48PT3,
+                            "agricultural marketing" = 32,                        
+                            "aids" = 21,
+                            "civil war" = 31,
+                            "climate change" = 33,
+                            "communications" = 12,
+                            "corruption" = 24,
+                            "crime and security" = 23,
+                            "democracy/political rights" = 29,
+                            "discrimination/ inequality" = 27,
+                            "drought" = 9,
+                            "education" = 14,
+                            "electricity" = 16,
+                            "farming/agriculture" = 7,
+                            "food shortage/famine" = 8,
+                            "gender issues / women’s rights" = 28,
+                            "health" = 20,
+                            "housing" = 15,
+                            "infrastructure / roads" = 13,
+                            "land" = 10,
+                            "loans / credit" = 6,
+                            "management of the economy" = 1,
+                            "no further reply" = 9996,
+                            "orphans/street children/homeless children" = 18,
+                            "other responses" = 9995,
+                            "political instability/political divisions/ ethnic tensions" = 26,
+                            "political violence" = 25,
+                            "poverty/destitution" = 4,
+                            "rates and taxes" = 5,
+                            "services (other)" = 19,
+                            "sickness / disease" = 22,
+                            "transportation" = 11,
+                            "unemployment" = 3,
+                            "wages, incomes and salaries" = 2,
+                            "war (international)" = 30,
+                            "water supply" = 17))%>% 
+mutate(Q95A=recode(Q95A,
+                            "No (not looking)" = 0,
+                            "No (looking)" = 1,
+                            "Yes, part time" = 2,
+                            "Yes, full time" = 3,
+                            "Refused" = 8,
+                            "Don’t know" = 9,
+                            "Missing" = -1))
+
+```
+
+```{r gender_issues, include=FALSE}
+# calculate frequencies of answers for each level, for each question
+
+afro_subset$gender_issues <- ifelse(afro_subset$Q48PT1 == 28 | afro_subset$Q48PT2 == 28 | afro_subset$Q48PT3 == 28, 1, 0)
+
+afro_subset_freq <- afro_subset %>% 
+  select(REGION,COUNTRY,gender_issues) %>% 
+  group_by(COUNTRY, REGION,gender_issues) %>% 
+  summarise(n = n()) %>% 
+  mutate(prop = n/sum(n))
+
+
+
+
+#plot bloxplot for each question
+afro_subset_freq %>%
+filter(gender_issues ==1)%>%
+ggplot(aes(x = COUNTRY, y = prop, fill = COUNTRY)) +
+geom_boxplot() +
+theme_bw()+
+scale_fill_brewer(palette = "Set3")+
+labs(x= "Country", y = "Proportion of responses", title = "Proportion of respondents who mentioned gender issues as the most important issue in the country")
+
+
+
+```
+
+
+
+
+
+
+
+
+```{r}
+#export afro_subset_freq to csv
+write.csv(afro_subset_freq, "data/afrobarometer_2022/summary_stats_standarized.csv")
+```
+
+              

@@ -1,0 +1,261 @@
+---
+title: "Afrobarometer"
+author: "Juliana Gómez Consuegra"
+date: "`r Sys.Date()`"
+output: pdf_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(haven) #load spss file
+library(dplyr) #data manipulation
+library(foreign)
+library(ggplot2)
+library(tidyr)
+```
+
+
+```{r load_data, include=FALSE}
+#with haven
+# afro_spss <- read_sav('data/afrobarometer_2019/r7_merged_data_34ctry.release.sav')
+
+#with foreign
+afro_spss <-read.spss("data/afrobarometer_2019/r7_merged_data_34ctry.release.sav",  
+                   to.data.frame = TRUE) 
+
+head(afro_spss)
+```
+
+```{r format_names, include=FALSE}
+# change all . in afro_spss column names to _
+names(afro_spss) <- gsub("\\.", "_", names(afro_spss))
+```
+
+```{r subset_df, include=FALSE}
+country_list = c('Tanzania', 'Kenya', 'Uganda', 'Mozambique')
+questions_columns = c('RESPNO','COUNTRY','LOCATION_LEVEL_1','Q38D', 'Q38E', 'Q38F', 'Q77A', 'Q77B', 'Q77C', 'Q77D', 'Q78B', 'Q86A', 'Q94', 'Q95C')
+
+afro_subset <- afro_spss %>% 
+  select(all_of(questions_columns)) %>% 
+  filter(COUNTRY %in% country_list)
+```
+
+# Labels for our variables of interest
+
+|QUESTIONS|LABEL|LEVEL|
+|---|---|---|
+|Q38D|Missing  |-1|   
+|Q38E|Strongly Disagree |1|
+|Q38F|Disagree |2 |
+|Q77B|Neither Agree Nor Disagree   |3 | 
+|Q77C|Agree  |4 |   
+|Q77D|Strongly Agree |5|
+||Refused   |8 |  
+||Don’t Know |9|
+|---------|
+|Q77A|Missing  |-1    |     
+||Strongly Disagree |1|
+||Disagree |2 |
+||Neither Agree Nor Disagree   |3 |                   
+||Agree  |4 |             
+||Strongly Agree |5|
+||Refused   |8 |             
+||Don’t Know |9|
+||Not asked in the country |99|
+|---------|
+|Q78B|Missing  |-1    | 
+||Never justified |1| 
+||Sometimes justified |2 |  
+||Always justified |3| 
+||Refused  |8 |        
+||Don't know | 9 |
+|---------|
+|Q86A| Missing  | -1 |      
+||Never |0 |
+||Once or twice |1| 
+||Several times  |2|  
+||Many times  |3|      
+||Refused |8|
+||Don't know |9|
+|---------|
+|Q94|Missing |-1| 
+||No, not looking |0|     
+||No, looking |1|  
+||Yes, part time |2|  
+||Yes, full time |3| 
+||Refused |8|     
+||Don’t know |9|
+|---------|
+|Q95C|Missing |-1|
+||You make the decisions yourself |1| 
+||Your spouse makes the decisions |2| 
+||You make the decisions jointly with your spouse |3|
+||You make the decisions jointly with other family members |4| 
+||Other family members make the decisions without you |5|
+||None of the above / Some other response |6| 
+||Not applicable, no earnings |7|
+||Refused |8|
+||Don’t know |9| 
+
+```{r check_for_nulls, include=FALSE}
+#check for nulls in afro_subset. No NULLS
+print(afro_subset %>%
+  summarise(count = sum(is.na(.))))
+```
+
+
+```{r levels, include=FALSE}
+# check levels for all variables
+for (i in 3:12) {
+  print(names(afro_subset)[i])
+  print(levels(afro_subset[[i]]))
+}
+```
+
+
+```{r format_variables, include=FALSE}
+# change datatype in vars
+test <- afro_subset
+
+#format variables
+change_minusone_to_nine <- function(x) {
+  x <- x %>% 
+    factor(levels = c("Missing", "Strongly Disagree", "Disagree",
+                      "Neither Agree Nor Disagree", "Agree", "Strongly Agree",
+                      "Refused", "Don’t Know"),
+           labels = c('-1', '1', '2', '3', '4', '5', '8', '9'))
+  return(x)
+}
+
+
+for_one_to_nine_vars <- c('Q38D', 'Q38E', 'Q38F', 'Q77C', 'Q77B', 'Q77D')
+for (i in for_one_to_nine_vars) {
+  test[[i]] <- change_minusone_to_nine(afro_subset[[i]])
+}
+
+# format Q77A
+test$Q77A <- test$Q77A %>% 
+  factor(levels = c("Missing", "Strongly Disagree", "Disagree",
+                    "Neither Agree Nor Disagree", "Agree", "Strongly Agree",
+                    "Refused", "Don’t Know", "Not asked in the country"),
+         labels = c('-1', '1', '2', '3', '4', '5', '8', '9', '99'))
+
+
+# format Q78B
+test$Q78B <- test$Q78B %>% 
+  factor(levels = c("Missing","Never justified","Sometimes justified","Always justified",                    "Refused","Don't know"),
+         labels = c('-1', '1', '2', '3', '8', '9'))
+
+#format Q86A
+test$Q86A <- test$Q86A %>% 
+  factor(levels = c("Missing","Never","Once or twice", "Several times",
+                    "Many times", "Refused","Don't know"),
+         labels = c('-1', '0', '1', '2', '3', '8', '9'))
+
+#format Q94
+test$Q94 <- test$Q94 %>% 
+  factor(levels = c("Missing","No, not looking", "No, looking","Yes, part time",
+                    "Yes, full time",  "Refused","Don’t know"),
+         labels = c('-1', '0', '1', '2', '3', '8', '9'))
+
+#format Q95C
+test$Q95C <- test$Q95C %>% 
+  factor(levels = c('Missing', 'You make the decisions yourself', 'Your spouse makes the decisions', 'You make the decisions jointly with your spouse', 'You make the decisions jointly with other family members', 'Other family members make the decisions without you', 'None of the above / Some other response', 'Not applicable, no earnings', 'Refused', "Don’t know"),
+         labels = c('-1', '1', '2', '3', '4', '5', '6', '7', '8', '9'))
+
+#chage datatypes to numeric for all Q
+for (i in 4:14) {
+  test[[i]] <- as.numeric(test[[i]])
+}
+
+# typecast to relevant types
+test$LOCATION_LEVEL_1 <- as.factor(test$LOCATION_LEVEL_1)
+
+#check for nas (still 8 NAs)
+print(test %>%
+   summarise(count = sum(is.na(.))))
+
+```
+
+
+```{r summary_statistics_unstandarized, include=FALSE}
+# summary statistics for all variables, group by location_level_1 Drop RESPNO
+
+
+summary_stats <- test %>% 
+  select(!RESPNO)%>% 
+  group_by(COUNTRY,LOCATION_LEVEL_1) %>% 
+  summarise_all(list(mean = mean, median = median, sd=sd)) %>% 
+  # summarise_all(funs(mean(., na.rm = TRUE), sd(., na.rm = TRUE), sum(!is.na(.)))) %>% 
+  ungroup()
+
+summary_stats
+```
+
+
+```{r summary_statistics_standarized, include=FALSE}
+# standardize the data. Make sure to account for divisions by zero
+standardize <- function(x) {
+  # Calculate mean and standard deviation
+  mean_x <- mean(x, na.rm = TRUE)
+  sd_x <- sd(x, na.rm = TRUE)
+  
+  # Check for zero standard deviation
+  if (sd_x == 0) {
+    # Add a small epsilon value to avoid division by zero
+    epsilon <- 1e-10  # You can adjust this value if needed
+    return((x - mean_x) / (sd_x + epsilon))
+  } else {
+    # Standard calculation if standard deviation is not zero
+    return((x - mean_x) / sd_x)
+  }
+}
+
+# change missing data to NA and standardize
+test_standarized <- test %>% 
+  select(!RESPNO)%>% 
+  mutate_all(~replace(., . == -1, NA))%>%
+  group_by(COUNTRY,LOCATION_LEVEL_1) %>%
+  mutate_all(standardize) %>%
+  ungroup()
+
+
+summary_stats_standarized <- test_standarized %>%
+  group_by(COUNTRY,LOCATION_LEVEL_1) %>%
+  summarise_all(list(mean = mean, median = median, sd=sd)) %>%
+  ungroup()
+
+#check for NaN in test_standarized
+print(test_standarized %>%
+  summarise(count = sum(is.na(.))))
+
+```
+
+```{r boxplots_standarized, include=TRUE, fig.width=10, fig.height=10}
+# boxplots for all variables in test_standarized. Use ggplot and panels
+boxplot_standardized <- test_standarized %>% 
+  gather(key = "variable", value = "value", -COUNTRY, -LOCATION_LEVEL_1) %>% 
+  ggplot(aes(x = variable, y = value)) +
+  theme_bw()+
+  geom_boxplot() +
+  facet_wrap(~COUNTRY, scales = "free") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "Boxplots for all variables in test_standarized", x = "Variables", y = "Values")
+
+print(boxplot_standardized)
+```
+
+
+```{r}
+#export summary_stats_standarized to csv
+write.csv(summary_stats_standarized, "data/afrobarometer_2019/summary_stats_standarized.csv")
+```
+
+                                   
+
+  
+                                                 
+                                                       
+

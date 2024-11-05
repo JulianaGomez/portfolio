@@ -6,28 +6,6 @@ Project developed for the Natural Language Processing with Deep Learning Final P
 *Authors*: Rachel Gao, Juliana Gómez Consuegra, Erica Nakabayashi  
 
 
-## Structure
-
-├── README.md
-├── notebooks
-│   ├── grammatical_acceptability_clasifier
-│   │   ├── RoBERTa_base_max_len_128_pooler.ipynb
-│   │   ├── RoBERTa_base_pooler.ipynb
-│   │   ├── RoBERTa_large_cls.ipynb
-│   │   └── RoBERTa_large_pooler.ipynb
-│   └── grammatical_error_corrector
-│       ├── confusion_sets.ipynb
-│       ├── confusion_sets_large.ipynb
-│       ├── GEC_metrics_comparison.ipynb
-│       ├── GECM_comp_emotion.ipynb
-│       ├── JG_POS_tagging.ipynb
-│       ├── tokenizers.ipynb
-│       └── try_spellcheck_pipeline.ipynb
-└── deliverables
-    ├── slide_deck.pptx
-    └── final_report.html
-
-
 ## My role 
 
 I was responsible for coming up with the research idea, research design (along with the rest of the team), gathering some of the data, doing EDA on the Grammatical Error Corrector, experimenting with Parts-of-speech tagging and spellchecking for the model, running RoBERTa models and hyperparameter tuning. I also wrote the final report, which can be found in the deliverables section.

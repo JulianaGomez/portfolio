@@ -4,26 +4,7 @@ Project developed for the Machine Learning at Scale Class, as part of my Masters
 
 *Authors*: Ray Cao, Jenna Sparks, Dhyuti Ramdas, Rachel Gao, Juliana Gómez Consuegra
 
-  
-## Structure
-
-
-├── README.md         
-├── notebooks
-│   ├── 3m_OTPW_weather_EDA.ipynb       
-│   ├── 1Y_raw_weather_EDA.ipynb    
-│   ├── 2015_1YR_OTPW_parquet_train_s1_weather_feature_engineering.ipynb        
-│   └── additional_data_sourcing_weather_2020.ipynb             
-│   └── additional_data_sourcing_weather_full_2020_2023.ipynb         
-│   └── events_2015_2019.ipynb   
-│   └── natural_disasters_2015_2019.ipynb          
-│   └── gap_analysis_ensemble.ipynb          
-│      
-│
-├── deliverables      
-│   ├── slide_deck.pdf       
-│   ├── final_report.html       
-     
+ 
 
 
 ## My role

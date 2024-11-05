@@ -8,27 +8,24 @@ Project developed for the Natural Language Processing with Deep Learning Final P
 
 ## Structure
 
-
-├── README.md         
+├── README.md
 ├── notebooks
-│   ├── grammatical_acceptability_clasifier       
-│   		├── RoBERTa_base_max_len_128_pooler.ipynb    
-│   		├── RoBERTa_base_pooler.ipynb    
-│   		├── RoBERTa_large_cls.ipynb    
-│   		├── RoBERTa_large_pooler.ipynb    
-│   ├── grammatical_error_corrector       
-│   		├── confusion_sets.ipynb  
-│   		├── confusion_sets_large.ipynb   
-│   		├── GEC_metrics_comparison.ipynb   
-│   		├── GECM_comp_emotion.ipynb   
-│   		├── JG_POS_tagging.ipynb  
-│   		├── tokenizers.ipynb   
-│   		├── try_spellcheck_pipeline.ipynb  
-├── deliverables      
-│   ├── slide_deck.pptx       
-│   ├── final_report.html       
-
-
+│   ├── grammatical_acceptability_clasifier
+│   │   ├── RoBERTa_base_max_len_128_pooler.ipynb
+│   │   ├── RoBERTa_base_pooler.ipynb
+│   │   ├── RoBERTa_large_cls.ipynb
+│   │   └── RoBERTa_large_pooler.ipynb
+│   └── grammatical_error_corrector
+│       ├── confusion_sets.ipynb
+│       ├── confusion_sets_large.ipynb
+│       ├── GEC_metrics_comparison.ipynb
+│       ├── GECM_comp_emotion.ipynb
+│       ├── JG_POS_tagging.ipynb
+│       ├── tokenizers.ipynb
+│       └── try_spellcheck_pipeline.ipynb
+└── deliverables
+    ├── slide_deck.pptx
+    └── final_report.html
 
 
 ## My role 

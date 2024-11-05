@@ -17,7 +17,7 @@ As part of my Machine Learning at Scale course for the Master of Information and
 
 
 ## Improving ASR output using a transformer-based grammatical error correction approach
-Speech-to-text systems show bias against low-resource languages. My team (Rachel Gao, Erica Nakabayashi and myself) decided to tackle this problem for our final project for our Natural Language Processing with Deep Learning course. I came up with the research idea, and was in charge of research design (along with the rest of the team), gathering some of the data, doing EDA on the Grammatical Error Corrector, experimenting with Parts-of_speech tagging and spellchecking for our model, running RoBERTa models and hyper-parameter tuning, as well as writing the final report.
+Speech-to-text systems show bias against low-resource languages. My team (Rachel Gao, Erica Nakabayashi and myself) decided to tackle this problem for our final project for our Natural Language Processing with Deep Learning course. I came up with the research idea, and was in charge of research design (along with the rest of the team), gathering some of the data, doing EDA on the Grammatical Error Corrector, experimenting with Parts-of-speech tagging and spellchecking for our model, running RoBERTa models and hyper-parameter tuning, as well as writing the final report.
 
 **Tech stack:**
 - Python
@@ -47,8 +47,7 @@ Our team (Henry Caldera, Eunice Ngai and myself) chose to estimate the effect of
 										
 
 ## Gender equity and climate change
-I collaborated with PhD candidates Silvia Barbereschi (UC Berkeley) and Beatrice Montano (Columbia) as a Research Assistant in their Gender Equity and Climate Change in Tanzania project. The goal of the project was to determine whether climate change had driven to changes in gender norms in Tanzania.
-I generated a dataset based on the land cover dataset from Copernicus Climate Data Store for the years between 2020-2022, and generated summary statistics for variables related to gender in Tanzania and other East African countries (Kenya, Uganda, Mozambique). I also generated visualizations for the number of consecutive dry days.
+I collaborated with PhD candidates Silvia Barbereschi (UC Berkeley) and Beatrice Montano (Columbia) as a Research Assistant in their Gender Equity and Climate Change in Tanzania project. The goal of the project was to determine whether climate change had driven to changes in gender norms in Tanzania. I generated a dataset based on the land cover dataset from Copernicus Climate Data Store for the years between 2020-2022, and generated summary statistics for variables related to gender in Tanzania and other East African countries (Kenya, Uganda, Mozambique). I also generated visualizations for the number of consecutive dry days.
 
 **Tech stack:**
 - Python

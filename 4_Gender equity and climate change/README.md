@@ -1,4 +1,4 @@
-# Effect of PM 2.5 on Asthma-related visits to the ER in Los Angeles
+# Gender equity and climate change
 
 I collaborated with PhD candidates Silvia Barbereschi (UC Berkeley) and Beatrice Montano (Columbia) as a Research Assistant in their Gender Equity and Climate Change in Tanzania project. The goal of the project was to determine whether climate change had driven to changes in gender norms in Tanzania. 
 

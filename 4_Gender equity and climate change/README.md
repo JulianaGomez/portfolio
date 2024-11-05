@@ -2,7 +2,7 @@
 
 I collaborated with PhD candidates Silvia Barbereschi (UC Berkeley) and Beatrice Montano (Columbia) as a Research Assistant in their Gender Equity and Climate Change in Tanzania project. The goal of the project was to determine whether climate change had driven to changes in gender norms in Tanzania. 
 
-*Authors*: Silvia Barbereschi, Beatrice Montano, Juliana Gómez Consuegra
+*Authors*: Silvia Barbereschi, Beatrice Montano, Joshua Benjamin Sengvongdeuane, Juliana Gómez Consuegra
 
 ## My role 
 I generated a dataset based on the land cover dataset from Copernicus Climate Data Store for the years between 2020-2022, and generated summary statistics for variables related to gender in Tanzania and other East African countries (Kenya, Uganda, Mozambique). I also generated visualizations for the number of consecutive dry days.

@@ -4,6 +4,8 @@ Project developed for the Machine Learning at Scale Class, as part of my Masters
 
   
 ##Structure
+
+
 ├── README.md         
 ├── notebooks
 │   ├── 3m_OTPW_weather_EDA.ipynb       

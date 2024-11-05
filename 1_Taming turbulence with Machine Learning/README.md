@@ -3,7 +3,7 @@
 Project developed for the Machine Learning at Scale Class, as part of my Masters in Information and Data Science at UC Berkeley.  This project predicts flight departure delays of 15 minutes or more at least 2 hours before the scheduled departure time to improve airport customer satisfaction. We leveraged the 5-year (2015-2019) On-Time Performance and Weather (OTPW) dataset that included flight, airport, and weather data for performing Exploratory Data Analyzes (EDA) and feature selection/engineering, data pipeline construction, and modeling. We experimented with various machine learning models to determine the best predictive results. We engineered features such as previous flight features, weather features, and time-dependent features, and built a modeling pipeline that could be used to predict on unseen data. We experimented with numerous models: linear regression (LR), random forest (RF), gradient-boosted random forest (GBRF), and Multilayer Perceptron Classifier (MLP). We evaluated the models with regression metrics and classification metrics. Our main metric was F𝛽 (𝛽=0.5). F𝛽 combines precision and recall performance, considering both true delays (precision) and delays in all departures (recall). Our best (most comprehensive) model was Ensemble via MLP with an F𝛽 of 0.45 coupled with our best pipeline built in ML flow, taking the preprocessed dataset as input and model results as output. Included in the pipeline were feature normalization, training, and cross-validation. We also considered future works to increase value for our stakeholders.
 
   
-##Structure
+## Structure
 
 
 ├── README.md         

@@ -1,12 +1,10 @@
 # Juliana Gómez Consuegra's Portfolio
 
-In this repository, you will find some showcased projects from my Master's in Information and Data Science at UC Berkeley. Additional projects can be found on my [website](https://julianagomezconsuegra.edi.eco/): 
+In this repository, you will find some showcased projects from my Master of Information and Data Science (MIDS) program at UC Berkeley. Additional projects can be found on my [website](https://julianagomezconsuegra.edi.eco/): 
 
 ## Taming turbulence with Machine Learning
 
-As part of my Machine Learning at Scale course for the Master of Information and Data Science at UC Berkeley, my team (Rachel Gao, Ray Cao, Jenna Sparks, Dhyuti Ramadas and myself) worked on predicting delayed flights at least two hours before departure.
-We leveraged a dataset of flight and weather variables between 2015-2019, containing 56 columns and 23.2M records.
-I was in charge of exploratory data analysis and feature engineering for the weather variables, sourcing new data for flights and weather for 2020-2023, and performing a gap analysis to identify where our best-performing ensemble model was struggling. The image above shows percentage of false positives by state in the training, validation and test sets in our best-performing model.
+As part of my Machine Learning at Scale course for the Master of Information and Data Science (MIDS) program at UC Berkeley, my team (Rachel Gao, Ray Cao, Jenna Sparks, Dhyuti Ramadas and myself) worked on predicting delayed flights at least two hours before departure.We leveraged a dataset of flight and weather variables between 2015-2019, containing 56 columns and 23.2M records. I was in charge of exploratory data analysis and feature engineering for the weather variables, sourcing new data for flights and weather for 2020-2023, and performing a gap analysis to identify where our best-performing ensemble model was struggling. The image above shows percentage of false positives by state in the training, validation and test sets in our best-performing model.
 
 **Tech stack:**
 - Databricks
